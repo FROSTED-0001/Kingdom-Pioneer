@@ -360,3 +360,37 @@ function buildStructure(structureName) {
 document.getElementById('build-barracks').addEventListener('click', () => buildStructure('barracks'));
 document.getElementById('build-marketplace').addEventListener('click', () => buildStructure('marketplace'));
 document.getElementById('build-farm').addEventListener('click', () => buildStructure('farm'));
+
+function growNeighboringKingdoms() {
+    setInterval(() => {
+        neighboringKingdoms.forEach((kingdom) => {
+            if (kingdom.diplomacyStatus === 'neutral' || kingdom.diplomacyStatus === 'allied') {
+                kingdom.armySize += Math.floor(Math.random() * 5);  // Army grows slowly for neutral or allied kingdoms
+            } else if (kingdom.diplomacyStatus === 'at war') {
+                kingdom.armySize += Math.floor(Math.random() * 10);  // Enemy armies grow faster
+            }
+        });
+    }, 10000);  // Every 10 seconds, the neighboring kingdoms grow
+}
+
+function enemyAttack(kingdomIndex) {
+    let kingdom = neighboringKingdoms[kingdomIndex];
+    setInterval(() => {
+        if (kingdom.diplomacyStatus === 'at war') {
+            const enemyStrength = kingdom.armySize;
+            const playerStrength = playerArmySize;
+
+            if (enemyStrength > playerStrength) {
+                alert(`${kingdom.name} is attacking you with an army of ${enemyStrength}!`);
+                population -= Math.floor(enemyStrength / 10);  // Casualties in population
+                playerArmySize -= Math.floor(enemyStrength / 20);  // Casualties in army size
+                updateResources();
+            } else {
+                alert(`${kingdom.name} failed to defeat you!`);
+            }
+        }
+    }, 15000);  // Attacks every 15 seconds
+}
+
+
+            
