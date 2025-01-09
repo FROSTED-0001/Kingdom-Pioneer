@@ -21,12 +21,22 @@
             <p>Stone: <span id="stone">0</span></p>
             <p>Gold: <span id="gold">0</span></p>
         </div>
-        <div id="actions">
-            <button id="gather-wood">Gather Wood</button>
-            <button id="gather-stone">Gather Stone</button>
-            <button id="bribe-citizen">Bribe Citizen</button>
-            <button id="bribe-citizen">Bribe Citizen (50 Gold)</button>
-        </div>
+        <div id="resources">
+    <p>Wood: <span id="wood-count"></span></p>
+    <p>Stone: <span id="stone-count"></span></p>
+    <p>Gold: <span id="gold-count"></span></p>
+    <p>Population: <span id="population-count"></span></p>
+    <p>Army Size: <span id="army-size"></span></p>
+    <button onclick="saveGame()">Save Game</button>
+    <button onclick="loadGame()">Load Game</button>
+
+</div>
+
+<div id="game-status">
+    <p>Player Health: <span id="player-health"></span></p>
+    <p>Old King Health: <span id="old-king-health"></span></p>
+</div>
+
 
     <div id="diplomacy">
         <h3>Diplomacy</h3>
