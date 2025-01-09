@@ -114,3 +114,62 @@ function increaseResourceProduction() {
         updateResources();
     }, 5000);
 }
+
+function spawnBanditAttack() {
+    setInterval(() => {
+        if (population > 0) {
+            const damage = Math.floor(Math.random() * 20 + 1);
+            wood -= damage;
+            stone -= damage;
+            gold -= damage;
+            alert(`Bandits attacked! You lost ${damage} of each resource.`);
+            updateResources();
+        }
+    }, 20000); // Every 20 seconds
+}
+
+// Start bandit attacks after settlement grows
+spawnBanditAttack();
+
+let oldKingdomThreat = 0;
+
+function escalateOldKingdomThreat() {
+    setInterval(() => {
+        oldKingdomThreat += 1;
+        if (oldKingdomThreat >= 5) {
+            launchAttackFromOldKingdom();
+        }
+    }, 30000); // Every 30 seconds
+}
+
+function launchAttackFromOldKingdom() {
+    const attackStrength = oldKingdomThreat * 10;
+    wood -= attackStrength;
+    stone -= attackStrength;
+    gold -= attackStrength;
+    alert(`The old kingdom attacked with ${attackStrength} strength!`);
+    updateResources();
+}
+
+// Start threat escalation
+escalateOldKingdomThreat();
+
+let alliances = 0;
+let wars = 0;
+
+document.getElementById('form-alliance').addEventListener('click', () => {
+    if (gold >= 100) {
+        gold -= 100;
+        alliances += 1;
+        alert('You formed an alliance!');
+        updateResources();
+    } else {
+        alert('Not enough gold!');
+    }
+});
+
+document.getElementById('declare-war').addEventListener('click', () => {
+    wars += 1;
+    alert('You declared war!');
+    escalateOldKingdomThreat();
+});
