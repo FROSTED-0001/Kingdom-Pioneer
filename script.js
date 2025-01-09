@@ -173,3 +173,43 @@ document.getElementById('declare-war').addEventListener('click', () => {
     alert('You declared war!');
     escalateOldKingdomThreat();
 });
+
+let alliances = 0;
+let wars = 0;
+
+document.getElementById('form-alliance').addEventListener('click', () => {
+    if (gold >= 100) {
+        gold -= 100;
+        alliances += 1;
+        alert('You formed an alliance!');
+        updateResources();
+    } else {
+        alert('Not enough gold!');
+    }
+});
+
+document.getElementById('declare-war').addEventListener('click', () => {
+    wars += 1;
+    alert('You declared war!');
+    escalateOldKingdomThreat();
+});
+
+let alliances = 0;
+let wars = 0;
+
+document.getElementById('form-alliance').addEventListener('click', () => {
+    if (gold >= 100) {
+        gold -= 100;
+        alliances += 1;
+        alert('You formed an alliance!');
+        updateResources();
+    } else {
+        alert('Not enough gold!');
+    }
+});
+
+document.getElementById('declare-war').addEventListener('click', () => {
+    wars += 1;
+    alert('You declared war!');
+    escalateOldKingdomThreat();
+});
