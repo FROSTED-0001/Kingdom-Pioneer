@@ -392,5 +392,30 @@ function enemyAttack(kingdomIndex) {
     }, 15000);  // Attacks every 15 seconds
 }
 
+function updateDiplomacyStatus() {
+    let kingdomList = document.getElementById('kingdom-list');
+    kingdomList.innerHTML = '';
 
-            
+    neighboringKingdoms.forEach((kingdom, index) => {
+        let listItem = document.createElement('li');
+        listItem.textContent = `${kingdom.name} - ${kingdom.diplomacyStatus}`;
+        kingdomList.appendChild(listItem);
+
+        // Add buttons for diplomacy actions
+        let actionButtons = document.createElement('div');
+        if (kingdom.diplomacyStatus === 'neutral') {
+            actionButtons.innerHTML = `
+                <button onclick="formAlliance(${index})">Form Alliance</button>
+                <button onclick="declareWar(${index})">Declare War</button>
+            `;
+        } else if (kingdom.diplomacyStatus === 'allied') {
+            actionButtons.innerHTML = `<button onclick="declareWar(${index})">Declare War</button>`;
+        } else if (kingdom.diplomacyStatus === 'at war') {
+            actionButtons.innerHTML = `<button onclick="formAlliance(${index})">Form Alliance</button>`;
+        }
+        listItem.appendChild(actionButtons);
+    });
+}
+
+// Call the function to update diplomacy status
+updateDiplomacyStatus();            
