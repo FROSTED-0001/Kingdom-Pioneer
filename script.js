@@ -532,3 +532,23 @@ function loadGame() {
     }
 }
 
+function updateResources() {
+    document.getElementById('wood-count').textContent = wood;
+    document.getElementById('stone-count').textContent = stone;
+    document.getElementById('gold-count').textContent = gold;
+    document.getElementById('population-count').textContent = population;
+    document.getElementById('army-size').textContent = playerArmySize;
+    document.getElementById('player-health').textContent = playerHealth;
+    document.getElementById('old-king-health').textContent = oldKingHealth;
+}
+
+let battleSound = new Audio('battle.mp3');
+let victorySound = new Audio('victory.mp3');
+
+function playBattleSound() {
+    battleSound.play();
+}
+
+function playVictorySound() {
+    victorySound.play();
+}
