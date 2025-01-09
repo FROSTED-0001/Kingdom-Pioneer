@@ -419,3 +419,116 @@ function updateDiplomacyStatus() {
 
 // Call the function to update diplomacy status
 updateDiplomacyStatus();            
+
+let playerHealth = 100;
+let oldKingHealth = 100;
+
+function checkVictoryConditions() {
+    if (oldKingHealth <= 0) {
+        alert("You have defeated the Old King and founded a new kingdom!");
+        // Trigger victory actions: e.g., unlock new levels, achievements, etc.
+    } else if (playerHealth <= 0) {
+        alert("Your kingdom has been destroyed. You lose.");
+        // Trigger defeat actions: e.g., restart the game, show a game over screen, etc.
+    }
+}
+
+function oldKingAttacks() {
+    setInterval(() => {
+        if (kingdomSize >= 3) {
+            let damage = Math.floor(Math.random() * 10);
+            playerHealth -= damage;
+            alert(`The Old King attacks! Your health is now: ${playerHealth}`);
+            checkVictoryConditions();
+        }
+    }, 30000);  // Old King attacks every 30 seconds
+}
+
+function enemyKingdomAttacks() {
+    setInterval(() => {
+        neighboringKingdoms.forEach(kingdom => {
+            if (kingdom.diplomacyStatus === 'at war') {
+                let damage = Math.floor(Math.random() * 10);
+                playerHealth -= damage;
+                alert(`${kingdom.name} attacks! Your health is now: ${playerHealth}`);
+                checkVictoryConditions();
+            }
+        });
+    }, 20000);  // Neighboring kingdoms attack every 20 seconds
+}
+
+oldKingAttacks();
+enemyKingdomAttacks();
+
+function saveGame() {
+    localStorage.setItem('kingdomGame', JSON.stringify({
+        wood: wood,
+        stone: stone,
+        gold: gold,
+        population: population,
+        playerArmySize: playerArmySize,
+        kingdomSize: kingdomSize,
+        neighboringKingdoms: neighboringKingdoms,
+        buildings: buildings,
+        playerHealth: playerHealth,
+        oldKingHealth: oldKingHealth
+    }));
+    alert("Game saved!");
+}
+
+function loadGame() {
+    const savedGame = JSON.parse(localStorage.getItem('kingdomGame'));
+    if (savedGame) {
+        wood = savedGame.wood;
+        stone = savedGame.stone;
+        gold = savedGame.gold;
+        population = savedGame.population;
+        playerArmySize = savedGame.playerArmySize;
+        kingdomSize = savedGame.kingdomSize;
+        neighboringKingdoms = savedGame.neighboringKingdoms;
+        buildings = savedGame.buildings;
+        playerHealth = savedGame.playerHealth;
+        oldKingHealth = savedGame.oldKingHealth;
+        alert("Game loaded!");
+        updateResources();
+    } else {
+        alert("No saved game found.");
+    }
+}
+
+function saveGame() {
+    localStorage.setItem('kingdomGame', JSON.stringify({
+        wood: wood,
+        stone: stone,
+        gold: gold,
+        population: population,
+        playerArmySize: playerArmySize,
+        kingdomSize: kingdomSize,
+        neighboringKingdoms: neighboringKingdoms,
+        buildings: buildings,
+        playerHealth: playerHealth,
+        oldKingHealth: oldKingHealth
+    }));
+    alert("Game saved!");
+}
+
+function loadGame() {
+    const savedGame = JSON.parse(localStorage.getItem('kingdomGame'));
+    if (savedGame) {
+        wood = savedGame.wood;
+        stone = savedGame.stone;
+        gold = savedGame.gold;
+        population = savedGame.population;
+        playerArmySize = savedGame.playerArmySize;
+        kingdomSize = savedGame.kingdomSize;
+        neighboringKingdoms = savedGame.neighboringKingdoms;
+        buildings = savedGame.buildings;
+        playerHealth = savedGame.playerHealth;
+        oldKingHealth = savedGame.oldKingHealth;
+        alert("Game loaded!");
+        updateResources();
+    } else {
+        alert("No saved game found.");
+    }
+}
+
