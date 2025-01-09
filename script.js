@@ -63,3 +63,31 @@ function initializeSettlement(location) {
     updateResources();
 }
 
+let population = 0;
+
+// Building construction logic
+document.getElementById('build-house').addEventListener('click', () => {
+    if (wood >= 50) {
+        wood -= 50;
+        population += 1;
+        alert('You built a house! Population increased.');
+        updateResources();
+    } else {
+        alert('Not enough resources!');
+    }
+});
+
+document.getElementById('build-mill').addEventListener('click', () => {
+    if (wood >= 100 && stone >= 50) {
+        wood -= 100;
+        stone -= 50;
+        setInterval(() => {
+            wood += 10; // Mills generate wood over time
+            updateResources();
+        }, 5000);
+        alert('You built a mill! Wood production increased.');
+        updateResources();
+    } else {
+        alert('Not enough resources!');
+    }
+});
