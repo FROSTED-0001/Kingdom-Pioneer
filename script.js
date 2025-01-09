@@ -91,3 +91,26 @@ document.getElementById('build-mill').addEventListener('click', () => {
         alert('Not enough resources!');
     }
 });
+
+let citizens = 0;
+
+document.getElementById('bribe-citizen').addEventListener('click', () => {
+    if (gold >= 50) {
+        gold -= 50;
+        citizens += 1;
+        alert('You bribed a citizen!');
+        increaseResourceProduction();
+        updateResources();
+    } else {
+        alert('Not enough gold!');
+    }
+});
+
+function increaseResourceProduction() {
+    setInterval(() => {
+        wood += 5 * citizens;
+        stone += 2 * citizens;
+        gold += 1 * citizens;
+        updateResources();
+    }, 5000);
+}
