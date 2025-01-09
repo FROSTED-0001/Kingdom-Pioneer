@@ -213,3 +213,65 @@ document.getElementById('declare-war').addEventListener('click', () => {
     alert('You declared war!');
     escalateOldKingdomThreat();
 });
+
+let oldKingArmySize = 5;  // Initial small army
+let playerArmySize = 10;  // Initial size of player's army
+let kingdomSize = 1;      // Initially, the kingdom is small
+
+function oldKingArmyAttack() {
+    setInterval(() => {
+        if (kingdomSize >= 1) {  // The Old King starts sending armies when the kingdom size is at least 1
+            let attackStrength = oldKingArmySize + Math.floor(Math.random() * (oldKingArmySize / 2));
+            let defenseStrength = playerArmySize;
+
+            if (attackStrength > defenseStrength) {
+                // Old King's army wins
+                alert(`The Old King sent an army of ${attackStrength} soldiers! You lost the battle.`);
+                // Reduce resources or lose population due to the attack
+                population -= Math.floor(Math.random() * 5 + 1);  // Decrease population (can adjust this logic)
+                updateResources();
+            } else {
+                // Player wins the battle
+                alert(`You successfully defended against the Old King's army of ${attackStrength} soldiers!`);
+            }
+        }
+    }, 30000); // Old King's army attacks every 30 seconds, you can adjust this as needed
+}
+
+// Increase the size of the Old King’s army as the player grows
+function increaseOldKingArmy() {
+    setInterval(() => {
+        if (kingdomSize >= 3) {
+            oldKingArmySize = 15;  // Bigger army when the kingdom grows
+        }
+        if (kingdomSize >= 5) {
+            oldKingArmySize = 30;  // Larger army when the kingdom is bigger
+        }
+    }, 10000);  // Update army size every 10 seconds
+}
+
+// Call the function to start the Old King's attacks
+oldKingArmyAttack();
+increaseOldKingArmy();
+
+// Increase kingdom size based on certain criteria (e.g., population or buildings)
+function increaseKingdomSize() {
+    if (population >= 20) {
+        kingdomSize = 2;
+    }
+    if (population >= 50) {
+        kingdomSize = 3;
+    }
+    if (population >= 100) {
+        kingdomSize = 4;
+    }
+    if (population >= 200) {
+        kingdomSize = 5;
+    }
+}
+
+let neighboringKingdoms = [
+    { name: 'Kingdom A', diplomacyStatus: 'neutral', armySize: 20 },
+    { name: 'Kingdom B', diplomacyStatus: 'neutral', armySize: 25 },
+    { name: 'Kingdom C', diplomacyStatus: 'neutral', armySize: 15 }
+];
