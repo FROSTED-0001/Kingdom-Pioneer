@@ -3,6 +3,21 @@ let wood = 0;
 let stone = 0;
 let gold = 0;
 
+let buildings = {
+    barracks: { cost: { wood: 50, stone: 30, gold: 100 }, built: false, populationBoost: 0, armyBoost: 10 },
+    marketplace: { cost: { wood: 40, stone: 40, gold: 80 }, built: false, populationBoost: 5, armyBoost: 0 },
+    farm: { cost: { wood: 20, stone: 10, gold: 30 }, built: false, populationBoost: 10, armyBoost: 0 }
+};
+
+function updateResources() {
+    document.getElementById('wood-count').textContent = wood;
+    document.getElementById('stone-count').textContent = stone;
+    document.getElementById('gold-count').textContent = gold;
+    document.getElementById('population-count').textContent = population;
+    document.getElementById('army-size').textContent = playerArmySize;
+}
+
+
 // DOM Elements
 const woodDisplay = document.getElementById('wood');
 const stoneDisplay = document.getElementById('stone');
@@ -275,3 +290,73 @@ let neighboringKingdoms = [
     { name: 'Kingdom B', diplomacyStatus: 'neutral', armySize: 25 },
     { name: 'Kingdom C', diplomacyStatus: 'neutral', armySize: 15 }
 ];
+
+// Function to handle forming alliances
+function formAlliance(kingdomIndex) {
+    let kingdom = neighboringKingdoms[kingdomIndex];
+    if (kingdom.diplomacyStatus === 'neutral') {
+        kingdom.diplomacyStatus = 'allied';
+        alert(`${kingdom.name} is now your ally!`);
+        // Example: Alliances can help protect against the Old King's army
+        playerArmySize += 5; // Strengthen player's army with the alliance
+    } else {
+        alert(`${kingdom.name} is already allied or at war with you!`);
+    }
+}
+
+// Function to handle declaring war
+function declareWar(kingdomIndex) {
+    let kingdom = neighboringKingdoms[kingdomIndex];
+    if (kingdom.diplomacyStatus === 'neutral') {
+        kingdom.diplomacyStatus = 'at war';
+        alert(`You declared war on ${kingdom.name}!`);
+        // Example: The neighboring kingdom sends armies to attack
+        setInterval(() => {
+            kingdom.armySize += 10;  // Enemy army grows over time
+            alert(`${kingdom.name} is sending an army to attack!`);
+        }, 30000);  // Every 30 seconds, they send a new army
+    } else if (kingdom.diplomacyStatus === 'allied') {
+        alert(`You cannot declare war on an ally!`);
+    }
+}
+
+// Attach event listeners to the diplomacy buttons
+document.getElementById('form-alliance').addEventListener('click', () => {
+    formAlliance(0); // Form alliance with the first neighboring kingdom (Kingdom A)
+});
+
+document.getElementById('declare-war').addEventListener('click', () => {
+    declareWar(1); // Declare war on the second neighboring kingdom (Kingdom B)
+});
+
+function buildStructure(structureName) {
+    if (buildings[structureName].built) {
+        alert(`${structureName} is already built!`);
+        return;
+    }
+
+    const building = buildings[structureName];
+    if (wood >= building.cost.wood && stone >= building.cost.stone && gold >= building.cost.gold) {
+        // Deduct resources
+        wood -= building.cost.wood;
+        stone -= building.cost.stone;
+        gold -= building.cost.gold;
+
+        // Increase the kingdom's population and army
+        population += building.populationBoost;
+        playerArmySize += building.armyBoost;
+
+        // Mark the building as built
+        buildings[structureName].built = true;
+
+        alert(`${structureName} built successfully!`);
+        updateResources();  // Update the resource display
+    } else {
+        alert(`Not enough resources to build ${structureName}.`);
+    }
+}
+
+// Example of building event listeners
+document.getElementById('build-barracks').addEventListener('click', () => buildStructure('barracks'));
+document.getElementById('build-marketplace').addEventListener('click', () => buildStructure('marketplace'));
+document.getElementById('build-farm').addEventListener('click', () => buildStructure('farm'));
