@@ -148,3 +148,47 @@ function gameLoop() {
 
     requestAnimationFrame(gameLoop);
 }
+
+// Settlers and Bandits
+let settlers = [];
+let bandits = [];
+let banditSpawnTimer = 0;
+
+// Recruit Settlers
+function recruitSettler() {
+    if (resources.wood >= 10 && resources.gold >= 5) {
+        settlers.push({ x: settlement.x, y: settlement.y, role: 'gatherer' });
+        resources.wood -= 10;
+        resources.gold -= 5;
+    }
+}
+
+// Draw Settlers
+function drawSettlers() {
+    settlers.forEach((settler, index) => {
+        ctx.fillStyle = settler.role === 'gatherer' ? 'blue' : 'red';
+        ctx.beginPath();
+        ctx.arc(settler.x, settler.y, 10, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Settler roles
+        if (settler.role === 'gatherer') {
+            const targetNode = resourceNodes[index % resourceNodes.length];
+            settler.x += (targetNode.x - settler.x) * 0.01;
+            settler.y += (targetNode.y - settler.y) * 0.01;
+
+            // Collect resources
+            const dist = Math.hypot(settler.x - targetNode.x, settler.y - targetNode.y);
+            if (dist < 20) {
+                resources[targetNode.type] += 1;
+            }
+        }
+    });
+}
+
+// Spawn Bandits
+function spawnBandit() {
+    if (banditSpawnTimer <= 0) {
+        const bandit = {
+            x: Math.random() * canvas.width,
+            y: Math.r
