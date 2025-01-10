@@ -6,6 +6,13 @@ const ctx = canvas.getContext("2d");
 canvas.width = 800;
 canvas.height = 600;
 
+// Center canvas on the screen (using CSS)
+document.body.style.display = "flex";
+document.body.style.justifyContent = "center";
+document.body.style.alignItems = "center";
+document.body.style.height = "100vh";
+document.body.style.margin = "0";
+
 // Player and Game Variables
 let player = { x: 400, y: 300, speed: 4 };
 let resources = { wood: 0, stone: 0, gold: 0 };
@@ -27,12 +34,12 @@ let settlement = null;
 // Key State
 let keys = {};
 
-// Player Movement
+// Player Movement (Restrict movement within canvas bounds)
 function movePlayer() {
-    if (keys['ArrowUp'] || keys['w']) player.y -= player.speed;
-    if (keys['ArrowDown'] || keys['s']) player.y += player.speed;
-    if (keys['ArrowLeft'] || keys['a']) player.x -= player.speed;
-    if (keys['ArrowRight'] || keys['d']) player.x += player.speed;
+    if (keys['ArrowUp'] || keys['w']) player.y = Math.max(0, player.y - player.speed);
+    if (keys['ArrowDown'] || keys['s']) player.y = Math.min(canvas.height - 10, player.y + player.speed);
+    if (keys['ArrowLeft'] || keys['a']) player.x = Math.max(0, player.x - player.speed);
+    if (keys['ArrowRight'] || keys['d']) player.x = Math.min(canvas.width - 10, player.x + player.speed);
 }
 
 // Draw Player
@@ -105,61 +112,4 @@ function drawBandits() {
         ctx.arc(bandit.x, bandit.y, 10, 0, Math.PI * 2);
         ctx.fill();
 
-        // Move toward the settlement
-        bandit.x += (bandit.targetX - bandit.x) * 0.005;
-        bandit.y += (bandit.targetY - bandit.y) * 0.005;
-
-        // Check if bandit reached the settlement
-        const dist = Math.hypot(bandit.x - settlement.x, bandit.y - settlement.y);
-        if (dist < 20) {
-            bandits.splice(index, 1); // Remove bandit
-            alert("Bandit attack! Settlement damaged!");
-        }
-    });
-}
-
-// Update Game Loop
-function gameLoop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas at the start
-
-    switch (gameState) {
-        case "choosingLocation":
-            ctx.fillStyle = "black";
-            ctx.font = "30px Arial";
-            ctx.fillText("Choose a location for your settlement", canvas.width / 4, canvas.height / 2);
-            ctx.fillText("Move with WASD or Arrow keys", canvas.width / 4, canvas.height / 2 + 50);
-            ctx.fillText("Press Enter to finalize", canvas.width / 4, canvas.height / 2 + 100);
-            drawPlayer();
-            movePlayer();
-            finalizeSettlement();
-            break;
-
-        case "settling":
-            drawPlayer();
-            movePlayer();
-            drawSettlement();
-            drawResourceNodes();
-            collectResources();
-            drawBandits();
-            spawnBandit();
-
-            ctx.fillStyle = "black";
-            ctx.fillText("Press 'R' to recruit a settler (10 wood, 5 gold)", 10, 60);
-            ctx.fillText("Resources - Wood: " + resources.wood + " Stone: " + resources.stone + " Gold: " + resources.gold, 10, 30);
-            break;
-    }
-
-    requestAnimationFrame(gameLoop);
-}
-
-// Handle New Keys
-window.addEventListener('keydown', (e) => {
-    keys[e.key] = true;
-});
-
-window.addEventListener('keyup', (e) => {
-    keys[e.key] = false;
-});
-
-// Initial Game Start
-gameLoop();
+        // Move towar
