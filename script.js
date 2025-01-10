@@ -62,3 +62,89 @@ function gameLoop() {
 // Start the Game Loop
 gameLoop();
 
+// Resource Nodes
+const resourceNodes = [
+    { x: 200, y: 200, type: 'wood', color: 'green' },
+    { x: 500, y: 300, type: 'stone', color: 'gray' },
+    { x: 700, y: 600, type: 'gold', color: 'yellow' }
+];
+
+// Settlement Location
+let settlement = null;
+
+// Draw Resource Nodes
+function drawResourceNodes() {
+    resourceNodes.forEach(node => {
+        ctx.fillStyle = node.color;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, 15, 0, Math.PI * 2);
+        ctx.fill();
+    });
+}
+
+// Check Resource Collection
+function collectResources() {
+    resourceNodes.forEach(node => {
+        const dist = Math.hypot(player.x - node.x, player.y - node.y);
+        if (dist < 25) {
+            switch (node.type) {
+                case 'wood':
+                    resources.wood += 1;
+                    break;
+                case 'stone':
+                    resources.stone += 1;
+                    break;
+                case 'gold':
+                    resources.gold += 1;
+                    break;
+            }
+        }
+    });
+}
+
+// Finalize Settlement
+function finalizeSettlement() {
+    if (keys['Enter']) {
+        settlement = { x: player.x, y: player.y };
+        gameState = "settling";
+    }
+}
+
+// Draw Settlement
+function drawSettlement() {
+    if (settlement) {
+        ctx.fillStyle = 'brown';
+        ctx.fillRect(settlement.x - 20, settlement.y - 20, 40, 40);
+        ctx.fillStyle = 'black';
+        ctx.fillText("Settlement", settlement.x - 30, settlement.y - 30);
+    }
+}
+
+// Update Game Loop
+function gameLoop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    switch (gameState) {
+        case "choosingLocation":
+            ctx.fillStyle = "black";
+            ctx.font = "30px Arial";
+            ctx.fillText("Choose a location for your settlement", canvas.width / 4, canvas.height / 2);
+            ctx.fillText("Move with WASD or Arrow keys", canvas.width / 4, canvas.height / 2 + 50);
+            ctx.fillText("Press Enter to finalize", canvas.width / 4, canvas.height / 2 + 100);
+            drawPlayer();
+            movePlayer();
+            finalizeSettlement();
+            break;
+        case "settling":
+            drawPlayer();
+            movePlayer();
+            drawSettlement();
+            drawResourceNodes();
+            collectResources();
+            ctx.fillStyle = "black";
+            ctx.fillText(`Resources - Wood: ${resources.wood}, Stone: ${resources.stone}, Gold: ${resources.gold}`, 10, 30);
+            break;
+    }
+
+    requestAnimationFrame(gameLoop);
+}
