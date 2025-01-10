@@ -305,3 +305,5 @@ window.addEventListener('keyup', (e) => {
 // Initial Game Start
 gameLoop();
 
+    
+
